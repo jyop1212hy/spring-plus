@@ -1,6 +1,7 @@
 package org.example.expert.domain.todo.dto.response;
 
 import lombok.Getter;
+import org.example.expert.domain.todo.weatherEnum.Weather;
 import org.example.expert.domain.user.dto.response.UserResponse;
 
 import java.time.LocalDateTime;
