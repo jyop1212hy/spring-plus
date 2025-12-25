@@ -8,16 +8,23 @@ public enum Weather {
     SNOWY;
 
     public static Weather fromExternal(String external) {
-        if (external == null){return null;}
 
-        String lowerCase = external.trim().toLowerCase();
+        if(external == null || external.isBlank()) {
+            throw new IllegalArgumentException("Weather is null or empty");
+        }
 
-        return switch (lowerCase) {
-            case "sunny", "warm" -> SUNNY;
-            case "rainy" -> RAINY;
-            case "cloudy" -> CLOUDY;
-            case "snowy" -> SNOWY;
-            default -> throw new IllegalArgumentException("Unknown weather: " + external);
-        };
+        String lowerCase = external.toLowerCase();
+        if(lowerCase.contains("sun")) {return SUNNY;}
+        if(lowerCase.contains("cloud")) {return CLOUDY;}
+        if(lowerCase.contains("rain")) {return RAINY;}
+        if(lowerCase.contains("snow")) {return SNOWY;}
+
+        throw new IllegalArgumentException("Unknown weather: " + external);
+//        return switch (lowerCase) {
+//            case "sunny", "warm" -> SUNNY;
+//            case "rainy" -> RAINY;
+//            case "cloudy" -> CLOUDY;
+//            case "snowy" -> SNOWY;
+//            default -> throw new IllegalArgumentException("Unknown weather: " + external);
+        }
     }
-}
