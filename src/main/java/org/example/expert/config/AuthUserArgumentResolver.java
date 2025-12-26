@@ -45,7 +45,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         if (principal instanceof AuthUser authUser) {
             return authUser;
         }
-        throw new IllegalArgumentException("인증 주체(principal)가 AuthUser 타입이 아닙니다.");
+        throw new AuthException("인증 주체(principal)가 AuthUser 타입이 아닙니다.");
     }
 }
 
