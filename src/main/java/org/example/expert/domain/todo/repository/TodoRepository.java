@@ -16,7 +16,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, TodoCustomRep
     @Query("""
             SELECT t
             FROM Todo t
-            JOIN FETCH t.user u
             WHERE (:weather IS NULL OR t.weather = :weather)
             AND (:startDate IS NULL OR t.modifiedAt >= :startDate)
             AND (:endDate IS NULL OR t.modifiedAt <= :endDate)

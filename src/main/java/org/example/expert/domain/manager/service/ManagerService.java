@@ -26,8 +26,8 @@ import java.util.List;
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
-    private final UserRepository userRepository;
     private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
@@ -36,7 +36,7 @@ public class ManagerService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+        if (todo.getUserId() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUserId())) {
             throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 유효하지 않거나, 일정을 만든 유저가 아닙니다.");
         }
 
@@ -56,6 +56,7 @@ public class ManagerService {
         );
     }
 
+
     public List<ManagerResponse> getManagers(long todoId) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
@@ -73,14 +74,14 @@ public class ManagerService {
         return dtoList;
     }
 
-    @Transactional
+
     public void deleteManager(AuthUser authUser, long todoId, long managerId) {
         User user = User.fromAuthUser(authUser);
 
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+        if (todo.getUserId() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUserId())) {
             throw new InvalidRequestException("해당 일정을 만든 유저가 유효하지 않습니다.");
         }
 

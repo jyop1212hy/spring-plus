@@ -26,21 +26,30 @@ public class Todo extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Weather weather;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
-    private List<Comment> comments = new ArrayList<>();
+//    @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
+//    private List<Comment> comments = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "todo", cascade = CascadeType.PERSIST)
+//    private List<Manager> managers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "todo", cascade = CascadeType.PERSIST)
-    private List<Manager> managers = new ArrayList<>();
+//    public Todo(String title, String contents, Weather weather, User user) {
+//        this.title = title;
+//        this.contents = contents;
+//        this.weather = weather;
+//        this.user = user;
+//        this.managers.add(new Manager(user, this));
+//    }
 
-    public Todo(String title, String contents, Weather weather, User user) {
+
+    public Todo(String title, String contents, Weather weather, Long userId) {
         this.title = title;
         this.contents = contents;
         this.weather = weather;
-        this.user = user;
-        this.managers.add(new Manager(user, this));
+        this.userId = userId;
     }
 }
