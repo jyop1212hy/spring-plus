@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -33,11 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
         String url = request.getRequestURI();
 
         if (url.startsWith("/auth")
-                || url.startsWith("/error")
-                || url.startsWith("/actuator/health")
-                || url.startsWith("/swagger-ui")
-                || url.startsWith("/v3/api-docs")
-                || url.startsWith("/h2-console")) {
+//                || url.startsWith("/error")
+//                || url.startsWith("/actuator/health")
+//                || url.startsWith("/swagger-ui")
+//                || url.startsWith("/v3/api-docs")
+//                || url.startsWith("/h2-console")
+        ) {
             chain.doFilter(request, response);
             return;
         }
@@ -61,15 +63,19 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             Long userId = Long.parseLong(claims.getSubject());
             String email = claims.get("email", String.class);
+            String nickName = claims.get("nickName", String.class);
             UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
 
-            request.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            request.setAttribute("email", claims.get("email"));
-            request.setAttribute("nickName", claims.get("nickName"));
-            request.setAttribute("userRole", claims.get("userRole"));
+            SecurityPrincipal principal =
+                    new SecurityPrincipal(userId, email, nickName, userRole);
 
-            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userRole.name()));
-            var authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            principal,
+                            null,
+                            List.of(new SimpleGrantedAuthority("ROLE_" + userRole.name()))
+                    );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             if (url.startsWith("/admin")) {
@@ -97,4 +103,5 @@ public class JwtFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -26,4 +26,7 @@ public class TodoResponse {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
+    public TodoResponse(Long id, String title, String contents, Weather weather, UserResponse user, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    }
 }

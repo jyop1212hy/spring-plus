@@ -23,9 +23,9 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         if (hasAuthAnnotation != isAuthUserType) {
             throw new AuthException("@Auth와 AuthUser 타입은 함께 사용되어야 합니다.");
         }
-
         return hasAuthAnnotation;
     }
+
 
     @Override
     public Object resolveArgument(
@@ -37,15 +37,15 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             throw new AuthException("인증 정보가 없습니다.");
         }
 
         Object principal = authentication.getPrincipal();
-        if (principal instanceof AuthUser authUser) {
-            return authUser;
+        if (!(principal instanceof SecurityPrincipal authUser)) {
+            throw new AuthException("인증 주체(principal)가 AuthUser 타입이 아닙니다.");
         }
-        throw new AuthException("인증 주체(principal)가 AuthUser 타입이 아닙니다.");
+        return new AuthUser(authUser.getUserId(), authUser.getEmail(), authUser.getUserRole());
     }
 }
 

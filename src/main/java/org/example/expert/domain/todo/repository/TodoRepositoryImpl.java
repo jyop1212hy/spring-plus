@@ -10,6 +10,7 @@ import org.example.expert.domain.manager.entity.QManager;
 import org.example.expert.domain.search.TodoSearchResponse;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.entity.QTodo;
+import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.todoSearchCond.GetTodosCond;
 import org.example.expert.domain.todo.todoSearchCond.TodoSearchCond;
 import org.example.expert.domain.todo.weatherEnum.Weather;
@@ -23,6 +24,8 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static org.example.expert.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class TodoRepositoryImpl implements TodoCustomRepository {
@@ -41,21 +44,14 @@ public class TodoRepositoryImpl implements TodoCustomRepository {
         return endDate != null ? todo.modifiedAt.loe(endDate) : null;
     }
 
-    private BooleanExpression and(BooleanExpression base, BooleanExpression add) {
-        return add == null ? base : (base == null ? add : base.and(add));
-    }
-
 
     @Override
-    public Optional<TodoResponse> findTodoResponseById(Long todoId) {
+    public Optional<Todo> findByIdWithUser(Long todoId) {
         QTodo todo = QTodo.todo;
-        QUser user = QUser.user;
+//        QUser user = QUser.user;
 
-        TodoResponse result = jpaQueryFactory
-                .select(Projections.constructor(TodoResponse.class, todo.id, todo.title, todo.contents, todo.weather.stringValue(),
-                        Projections.constructor(UserResponse.class, user.id, user.email), todo.createdAt, todo.modifiedAt)
-                )
-                .from(todo)
+        Todo result = jpaQueryFactory
+                .selectFrom(todo)
                 .leftJoin(user).on(user.id.eq(todo.userId))
                 .where(todo.id.eq(todoId))
                 .fetchOne();

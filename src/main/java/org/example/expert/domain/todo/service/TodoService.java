@@ -13,6 +13,7 @@ import org.example.expert.domain.todo.todoSearchCond.GetTodosCond;
 import org.example.expert.domain.todo.weatherEnum.Weather;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
+import org.example.expert.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
     private final WeatherClient weatherClient;
 
     public TodoSaveResponse saveTodo(AuthUser authUser, TodoSaveRequest todoSaveRequest) {
@@ -56,7 +58,20 @@ public class TodoService {
     }
 
     public TodoResponse getTodo(long todoId) {
-        return todoRepository.findTodoResponseById(todoId)
+        Todo todo = todoRepository.findByIdWithUser(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+
+        User user = userRepository.findById(todo.getUserId())
+                .orElseThrow(() -> new InvalidRequestException("User not found"));
+
+        return new TodoResponse(
+                todo.getId(),
+                todo.getTitle(),
+                todo.getContents(),
+                todo.getWeather(),
+                new UserResponse(user.getId(), user.getEmail()),
+                todo.getCreatedAt(),
+                todo.getModifiedAt()
+        );
     }
 }

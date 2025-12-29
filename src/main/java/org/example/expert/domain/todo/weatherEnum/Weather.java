@@ -20,11 +20,5 @@ public enum Weather {
         if(lowerCase.contains("snow")) {return SNOWY;}
 
         throw new IllegalArgumentException("Unknown weather: " + external);
-//        return switch (lowerCase) {
-//            case "sunny", "warm" -> SUNNY;
-//            case "rainy" -> RAINY;
-//            case "cloudy" -> CLOUDY;
-//            case "snowy" -> SNOWY;
-//            default -> throw new IllegalArgumentException("Unknown weather: " + external);
         }
     }
