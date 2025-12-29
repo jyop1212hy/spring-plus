@@ -170,7 +170,7 @@ public class TodoRepositoryImpl implements TodoCustomRepository {
     private BooleanExpression createdAtBetween(QTodo todo, LocalDateTime start, LocalDateTime end) {
         if(start != null && end != null) {return todo.createdAt.between(start, end);}
         if(start != null) {return todo.createdAt.goe(start);}
-        if(end != null) {return todo.createdAt.goe(start);}
+        if(end != null) {return todo.createdAt.goe(end);}
         return null;
     }
 

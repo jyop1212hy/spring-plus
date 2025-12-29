@@ -15,7 +15,7 @@ public class SearchService {
 
     public Page<TodoSearchResponse> search(SearchRequest searchRequest) {
 
-        PageRequest pageable = PageRequest.of(searchRequest.getSize(),searchRequest.getPage());
+        PageRequest pageable = PageRequest.of(searchRequest.getPage()-1, searchRequest.getSize());
 
         TodoSearchCond cond = new TodoSearchCond(
                 searchRequest.getTitleKeyword(),
