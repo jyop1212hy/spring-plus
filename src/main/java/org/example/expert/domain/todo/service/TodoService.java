@@ -9,21 +9,15 @@ import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
+import org.example.expert.domain.todo.todoSearchCond.GetTodosCond;
 import org.example.expert.domain.todo.weatherEnum.Weather;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
-import org.example.expert.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,12 +49,10 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size, String weather, LocalDateTime start, LocalDateTime end) {
+    public Page<TodoResponse> getTodos(int page, int size, GetTodosCond cond) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Weather weatherEnum = null;
-        if (weather != null && !weather.isBlank()) {weatherEnum = Weather.fromExternal(weather);}
-        return todoRepository.searchTodoResponses(weatherEnum, start, end, pageable);
+        return todoRepository.searchTodoResponses(cond, pageable);
     }
 
     public TodoResponse getTodo(long todoId) {
