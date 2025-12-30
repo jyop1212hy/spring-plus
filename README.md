@@ -95,9 +95,9 @@ docker run -p 8080:8080 --name simple-aws expert
 ↓
 [ RDS (MySQL) ]
 
-- [AWS_RDS_데이터베이스_생성.pdf](https://github.com/<user>/<repo>/releases/download/<tag>/AWS_RDS_데이터베이스_생성.pdf)
-- [EC2_인바운드_규칙.pdf](https://github.com/<user>/<repo>/releases/download/<tag>/EC2_인바운드_규칙.pdf)
-- [EC2_인스턴스_시작.pdf](https://github.com/<user>/<repo>/releases/download/<tag>/EC2_인스턴스_시작.pdf)
+- [AWS_RDS_데이터베이스_생성.pdf](image/AWS_RDS_데이터베이스_생성.pdf)
+- [EC2_인바운드_규칙.pdf](image/EC2_인바운드%20규칙.pdf)
+- [EC2_인스턴스_시작.pdf](image/EC2_인스턴스%20시작.pdf)
 
 ⸻
 
