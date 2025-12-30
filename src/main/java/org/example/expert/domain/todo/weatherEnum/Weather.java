@@ -14,11 +14,13 @@ public enum Weather {
         }
 
         String lowerCase = external.toLowerCase();
-        if(lowerCase.contains("sun")) {return SUNNY;}
-        if(lowerCase.contains("cloud")) {return CLOUDY;}
-        if(lowerCase.contains("rain")) {return RAINY;}
-        if(lowerCase.contains("snow")) {return SNOWY;}
 
-        throw new IllegalArgumentException("Unknown weather: " + external);
+        if (lowerCase.contains("sun")) return SUNNY;
+        if (lowerCase.contains("cloud")) return CLOUDY;
+        if (lowerCase.contains("rain")) return RAINY;
+        if (lowerCase.contains("snow")) return SNOWY;
+
+        return CLOUDY;
+
         }
     }

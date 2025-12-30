@@ -1,0 +1,22 @@
+<configuration>
+
+    <!-- 콘솔 출력 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DB appender -->
+    <appender name="DB" class="org.example.expert.domain.logService.appender.DbLogAppender" />
+
+    <!-- 매니저 감사 로그만 DB로 -->
+    <logger name="MANAGER_AUDIT" level="INFO" additivity="false">
+        <appender-ref ref="DB"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

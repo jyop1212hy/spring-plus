@@ -3,9 +3,6 @@ package org.example.expert.domain.manager.service;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
-import org.example.expert.domain.logService.LogRequest;
-import org.example.expert.domain.logService.entity.Log;
-import org.example.expert.domain.logService.service.LogService;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequest;
 import org.example.expert.domain.manager.dto.response.ManagerResponse;
 import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
@@ -16,6 +13,8 @@ import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -31,7 +30,7 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
-    private final LogService logService;
+    private static final Logger audit = LoggerFactory.getLogger("MANAGER_AUDIT");
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
@@ -56,8 +55,7 @@ public class ManagerService {
             Manager savedManagerUser = managerRepository.save(newManagerUser);
 
             // 로그기록 남기기
-            Log log = Log.managerRegisterSuccess(todoId, savedManagerUser.getUser().getId(), managerUser.getId());
-            logService.write(log);
+            audit.info("MANAGER_REGISTER|SUCCESS|{}|{}|{}|{}", todoId, user.getId(), managerSaveRequest.getManagerUserId(), "ok");
 
             return new ManagerSaveResponse(
                     savedManagerUser.getId(),
@@ -65,7 +63,7 @@ public class ManagerService {
             );
 
         } catch (Exception e) {
-            logService.write(Log.managerRegisterFail(todoId, user.getId(), managerSaveRequest.getManagerUserId(), e.getMessage()));
+            audit.info("MANAGER_REGISTER|FAIL|{}|{}|{}|{}", todoId, user.getId(), managerSaveRequest.getManagerUserId(), e.getMessage());
             throw e;
         }
     }

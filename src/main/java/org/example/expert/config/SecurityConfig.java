@@ -27,14 +27,9 @@ public class SecurityConfig {
             .formLogin(AbstractHttpConfigurer::disable)
             .addFilterBefore(jwtFilter, SecurityContextHolderAwareRequestFilter.class)
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/auth/**",
-                            "/error",
-                            "/actuator/health",
-                            "/h2-console/**",
-                            "/swagger-ui/**",
-                            "/v3/api-docs/**"
-                    ).permitAll()
+                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/users/**").hasRole("USER")
                     .anyRequest().authenticated()
             )
             .build();
