@@ -9,3 +9,9 @@ EXPOSE 8080
 
 # 실행 명령어
 CMD ["java", "-jar", "app.jar"]
+
+jyop1212 / aws-test:1.0
+docker tag aws-test:latest jyop1212/aws-test:1.0
+docker push jyop1212/aws-test:1.0
+
+docker run -p 8080:8080 --name simple-aws jyop1212/aws-test:1.0
